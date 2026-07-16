@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voter Registration Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        body {
+            background: black;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container{
+            width: 100%;
+            max-width: 600px;
+        }
+        .form-card{
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        }
+        .form-card h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #1e3a8a;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #222;
+        }
+        input,select{
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #bbb;
+            border-radius: 10px;
+            outline: none;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+        input:focus
+        select:focus {
+            border-color: #1e3a8a;
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.15);
+        }
+
+        .button{
+            display: inline-block;
+            width: 300px;
+            text-align: center;
+            align-items: center;
+            padding: 14px;
+            border: none;
+            background: black;
+            color:goldenrod;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .button:hover{
+            background: goldenrod;
+            color: black;
+        }
+
+        @media (max-width: 600px) {
+            .form-card{
+                padding: 20px;
+            }
+            .form-card h1{
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-card">
+            <h1>Voters Registration Form</h1>
+            <p class="subtitle">Fill in ur details below</p>
+            <form id="voterForm"></form>
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName"
+                placeholder="Enter first name" required />
+            </div>
+        <div class="form-group">
+                <label for="firstName">Last Name</label>
+                <input type="text" id="lastName"
+                placeholder="Enter Last name" required />
+            </div>
+        <div class="form-group">
+                <label for="firstName">Other Name</label>
+                <input type="text" id="otherName"
+                placeholder="Enter Other name" required />
+            </div>
+            <div class="form-group">
+                <label for="state">State of Origin</label>
+                <select id="state" required>
+                    <option value="">--Select State--</option>
+                </select>
+            </div>
+        <div class="form-group">
+            <label for="lga">LGA</label>
+            <select id="lga" required>
+                <option value="">-- Select LGA --</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="pollingUnit">Polling Unit</label>
+            <input
+            type="text"
+            id="pollingUnit"
+            placeholder="Polling Unit"
+            required
+            >
+            </select>
+        </div>
+        <a href="vote-done.html" class="button">Register</a>
+        </div>
+    </div>
+
+    <script>
+        const stateAndLgas = {
+            "Abia": [
+                "Aba North", "Aba South", "Arochukwu", "Bende", "Ikwuano", "Isiala Ngwa North",
+                "Isiala Ngwa South", "Isuikwuato", "Obi Ngwa", "Ohafia", "Osisioma",
+                "Ugwunagbo", "Ukwa East", "Ukwa West", "Umuahia North", "Umuahia South", "Umu Nneochi"
+            ],
+            "Adamawa": [
+                "Demsa", "Fufore", "Ganye", "Girei","Yola North", "Yola South"
+            ],
+            "Akwa Ibom": [
+                "Abak", "Eastern Obolo", "Eket","Esit Eket", "Essien Udim", "Etim Ekpo", "Uyo"
+            ],
+            "Anambra": [
+                "Aguata", "Anambra East", "Anambra West", "Anaocha", "Onitcha North", "Onitcha South"
+            ],
+            "Bauchi": [
+                "Alkaleri", "Bauchi", "Bogoro", "Damban", "Darazo"
+            ],
+            "Bayelsa": [
+                "Brass", "Ekeremor", "Kolokuma/Opokuma", "Yenegoa"
+            ],
+            "Benue": [
+                "Ado", "Agatu", "Apa", "Buruku", "Logo", "Makurdi"
+            ],
+            "Borno": [
+                "Abadam", "Askira/Uba", "Bama", "Bayo", "Biu", "Maiduguri"
+            ],
+            "Cross River": [
+                "Abi", "Calabar"
+            ],
+            "Delta": [
+                "Aniocha North", "Aniocha South", "Bomadi", "Burutu", "Ethiope East", "Ethiope West"
+            ],
+            "Ebonyi": [
+                "Abakaliki",
+            ],
+            "Edo": [
+                "Akoko-Edo", "Egor", "Esan Central", "Esan North-East", "Esan South-East", "Esan West",
+                "Etsako Central"
+            ],
+            "Ekiti": [
+                "Ado Ekiti"
+            ],
+            "Enugu": [
+                "Aninri", "Awgu", "Enugu East", "Enugu North", "Enugu South"
+            ],
+            "FCT": [
+                "Abaji", "Abuja Municipal", "Bwari","Gwagwalada", "Kuje", "Kwali"
+            ],
+            "Gombe": [
+                "Akko", "Gombe"
+            ],
+            "Imo": [
+                "Aboh Mbaise", "Ahiazu Mbaise", "Ehime Mbano", "Owerri"
+            ],
+            "Jigawa": [
+                "Auyo", "Babura", "Dutse"
+            ],
+            "Kaduna": [
+                "Birnin Gwari", "Chikun", "Giwa", "Igabi", "Kaduna North", "Kaduna South"
+            ],
+            "Kano": [
+               "Ajingi", "Albasu", "Bagwai", "Bebeji", "Kano Municipal"
+            ],
+            "Katsina": [
+                "Bakori", "Batagarawa", "Batsari", "Baure", "Katsina"
+            ],
+            "Kebbi": [
+                "Aleiro", "Arewa Dandi", "Argungu", "Augie", "Birnin Kebbi"
+            ],
+            "Kogi": [
+                "Adavi", "Ajaokuta", "Ankpa", "Bassa", "Dekina", "Kogi", "Lokoja"
+            ],
+            "Kwara": [
+                "Asa", "Baruten", "Edu", "Ekiti", "Ilorin East", "Ilorin South", "Ilorin West"
+            ],
+            "Lagos": [
+                "Agege", "Ajeromi-Ifelodun", "Alimosho", "Ikeja" 
+            ],
+            "Nasarawa": [
+                "Lafia"
+            ],
+            "Niger": [
+                "Minna"
+            ],
+            "Ogun": [
+                "Abeokuta North", "Abeokuta South"
+            ],
+            "Ondo": [
+                "Akoko North-East", "Akoko South-East","Akoko South-West","Akure North", "Akure South"
+            ],
+            "Osun": [
+                "Osogbo"
+            ],
+            "Oyo": [
+                "Ibadan North", "Ibadan North-East", "Ibadan North-West", "Ibadan South-East", "Ibadan South-West"
+            ],
+            "Plateau": [
+                "Jos East", "Jos North", "Jos South"
+            ],
+            "Rivers": [
+                "Port Harcourt"
+            ],
+            "Sokoto": [
+                "Sokoto North", "Sokoto South"
+            ],
+            "Taraba": [
+                "Jalingo"
+            ],
+            "Yobe": [
+               "Damaturu" 
+            ],
+            "Zamfara": [
+                "Gusau"
+            ],
+        };
+
+        const stateSelect =
+    document.getElementById("state");
+        const lgaSelect =
+    document.getElementById("lga");
+        const voterForm =
+    document.getElementById("voterForm");
+
+    //Populate states
+        function loadStates() {
+            const states =
+    Object.keys(stateAndLgas).sort();
+
+        states.forEach(state => {
+            const option =
+        document.createElement("option");
+        option.value = state;
+        option.textContent = state;
+        stateSelect.appendChild(option);
+        })
+    }
+
+    // Populate LGAs based on selected states
+    function loadLGAs(selectedState) {
+        lgaSelect.innerHTML= '<option value"">-- Select LGA --</option>';
+
+        if (selectedState && stateAndLgas[selectedState]) {
+            stateAndLgas[selectedState].forEach(lga => {
+                const option =
+            document.createElement("option");
+                option.value = lga;
+                option.textContent = lga;
+                lgaSelect.appendChild(option);
+            });
+        }
+    }
+
+        // When state changes, update LGAS
+        stateSelect.addEventListener("change",function () {
+            loadLGAs(this.value);
+        });
+
+
+
+        // Form submit
+        voterForm.addEventListener("submit",function (e) {
+            e.preventDefault();
+
+            const firstName=
+        document.getElementById("firstName").value;
+            const lastName=
+        document.getElementById("lastName").value;
+            const otherName=
+        document.getElementById("otherName").value;
+            const state = stateSelect.value;
+            const lga=lgaSelect.value;
+            const pollingUnit=
+        document.getElementById("pollingUnit").value;
+
+        if (!state || !lga || !firstName ||!lastName || !pollingUnit) {
+            alert("Please fill all required fields.");
+            return;
+        }
+
+        alert(
+            "Registration Successful!\n\n"+
+            "First Name: " + firstName + "\n" +
+            "Last Name: " + lastName + "\n" +
+            "Other Name: " + otherName + "\n" +
+            "State: " + state + "\n" +
+            "LGA: " + lga + "\n" +
+            "Polling Unit: " + pollingUnit
+        );
+
+        voterForm.reset();
+        lgaSelect.innerHTML = '<option value"">-- Select LGA--</option>';
+        });
+        loadStates();
+    </script>
+</body>
+</html>
